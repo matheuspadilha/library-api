@@ -40,17 +40,20 @@ class BookControllerTest {
     @Test
     @DisplayName("Deve criar um livro com sucesso.")
     void createBookTest() throws Throwable {
+        //cenario
         BookDTO dto = BookDTO.builder().author("Matheus").title("Rock Balboa").isbn("0123").build();
         Book savedBook = Book.builder().id(1L).author("Matheus").title("Rock Balboa").isbn("0123").build();
         BDDMockito.given(service.save(Mockito.any(Book.class))).willReturn(savedBook);
         String json = new ObjectMapper().writeValueAsString(dto);
 
+        // execucao
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post(BOOK_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(json);
 
+        // verificacao
         mvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").value(1L))
