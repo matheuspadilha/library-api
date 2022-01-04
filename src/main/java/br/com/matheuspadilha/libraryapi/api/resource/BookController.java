@@ -2,6 +2,7 @@ package br.com.matheuspadilha.libraryapi.api.resource;
 
 import br.com.matheuspadilha.libraryapi.api.dto.BookDTO;
 import br.com.matheuspadilha.libraryapi.api.exception.ApiErrors;
+import br.com.matheuspadilha.libraryapi.exception.BusinessException;
 import br.com.matheuspadilha.libraryapi.model.entity.Book;
 import br.com.matheuspadilha.libraryapi.service.BookService;
 import org.modelmapper.ModelMapper;
@@ -37,9 +38,15 @@ public class BookController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrors handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ApiErrors handleValidationException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
 
         return new ApiErrors(bindingResult);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrors handleBusinessException(BusinessException ex) {
+        return new ApiErrors(ex);
     }
 }
