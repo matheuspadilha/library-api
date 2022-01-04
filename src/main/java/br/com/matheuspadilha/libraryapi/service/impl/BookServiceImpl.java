@@ -1,5 +1,6 @@
 package br.com.matheuspadilha.libraryapi.service.impl;
 
+import br.com.matheuspadilha.libraryapi.exception.BusinessException;
 import br.com.matheuspadilha.libraryapi.model.entity.Book;
 import br.com.matheuspadilha.libraryapi.model.repository.BookRepository;
 import br.com.matheuspadilha.libraryapi.service.BookService;
@@ -16,6 +17,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book book) {
+        if (repository.existsByIsbn(book.getIsbn())) {
+            throw new BusinessException("Isbn já cadastrado");
+        }
+
         return repository.save(book);
     }
 }
