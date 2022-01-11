@@ -181,6 +181,54 @@ class BookControllerTest {
         mvc.perform(request).andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    void updateBookTest() throws Exception {
+        // cenario (given)
+        Long id = 1L;
+        String json = new ObjectMapper().writeValueAsString(createNewBookDTO());
+
+        Book updatingBook = Book.builder().id(1L).title("Outro title").author("Sem Author").build();
+        BDDMockito.given(service.getById(Mockito.anyLong())).willReturn(Optional.of(updatingBook));
+
+        Book updatedBook = Book.builder().id(1L).author("Matheus").title("Rock Balboa").isbn("0123").build();
+        BDDMockito.given(service.update(updatingBook)).willReturn(updatedBook);
+
+        // execucao (when)
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(BOOK_API.concat("/" + 1))
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // verificacao (then)
+        mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(1L))
+                .andExpect(jsonPath("title").value(createNewBookDTO().getTitle()))
+                .andExpect(jsonPath("author").value(createNewBookDTO().getAuthor()))
+                .andExpect(jsonPath("isbn").value("0123"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 ao tentar atualizar um livro inexistente")
+    void updateInexistentBookTest() throws Exception {
+        // cenario (given)
+        String json = new ObjectMapper().writeValueAsString(createNewBookDTO());
+        BDDMockito.given(service.getById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        // execucao (when)
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(BOOK_API.concat("/" + 1))
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // verificacao (then)
+        mvc.perform(request).andExpect(status().isNotFound());
+    }
+
+
     private BookDTO createNewBookDTO() {
         return BookDTO.builder().author("Matheus").title("Rock Balboa").isbn("0123").build();
     }
