@@ -6,6 +6,7 @@ import br.com.matheuspadilha.libraryapi.model.repository.BookRepository;
 import br.com.matheuspadilha.libraryapi.service.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -33,11 +34,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void delete(Book book) {
+        if (Objects.isNull(book) || Objects.isNull(book.getId())) {
+            throw new IllegalArgumentException("Book id cant be null");
+        }
 
+        repository.delete(book);
     }
 
     @Override
     public Book update(Book book) {
-        return null;
+        if (Objects.isNull(book) || Objects.isNull(book.getId())) {
+            throw new IllegalArgumentException("Book id cant be null");
+        }
+
+        return repository.save(book);
     }
 }
