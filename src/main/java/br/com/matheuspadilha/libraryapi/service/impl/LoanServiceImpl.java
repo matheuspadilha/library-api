@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoanServiceImpl implements LoanService {
 
-    public LoanServiceImpl() {}
+    public LoanServiceImpl() { /* TODO document why this constructor is empty */ }
 
     @Override
     public Loan save(Loan loan) {
