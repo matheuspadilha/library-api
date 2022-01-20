@@ -16,12 +16,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class LoanController {
 
-    private LoanService service;
-    private BookService bookService;
-
-    public LoanController(LoanService service) {
-        this.service = service;
-    }
+    private final LoanService service;
+    private final BookService bookService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
