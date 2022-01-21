@@ -1,8 +1,6 @@
 package br.com.matheuspadilha.libraryapi.api.resource;
 
 import br.com.matheuspadilha.libraryapi.api.dto.BookDTO;
-import br.com.matheuspadilha.libraryapi.api.exception.ApiErrors;
-import br.com.matheuspadilha.libraryapi.exception.BusinessException;
 import br.com.matheuspadilha.libraryapi.model.entity.Book;
 import br.com.matheuspadilha.libraryapi.service.BookService;
 import org.modelmapper.ModelMapper;
@@ -10,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -72,20 +68,6 @@ public class BookController {
                 .map(entity -> modelMapper.map(entity, BookDTO.class))
                 .collect(Collectors.toList());
 
-        return new PageImpl<BookDTO>(list, pageRequest, result.getTotalElements());
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrors handleValidationException(MethodArgumentNotValidException ex) {
-        BindingResult bindingResult = ex.getBindingResult();
-
-        return new ApiErrors(bindingResult);
-    }
-
-    @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrors handleBusinessException(BusinessException ex) {
-        return new ApiErrors(ex);
+        return new PageImpl<>(list, pageRequest, result.getTotalElements());
     }
 }
