@@ -6,6 +6,8 @@ import br.com.matheuspadilha.libraryapi.model.repository.LoanRepository;
 import br.com.matheuspadilha.libraryapi.service.LoanService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LoanServiceImpl implements LoanService {
 
@@ -23,5 +25,15 @@ public class LoanServiceImpl implements LoanService {
         }
 
         return repository.save(loan);
+    }
+
+    @Override
+    public Optional<Loan> getById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void update(Loan loan) {
+
     }
 }

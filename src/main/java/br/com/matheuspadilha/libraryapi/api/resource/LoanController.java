@@ -1,6 +1,7 @@
 package br.com.matheuspadilha.libraryapi.api.resource;
 
 import br.com.matheuspadilha.libraryapi.api.dto.LoanDTO;
+import br.com.matheuspadilha.libraryapi.api.dto.ReturnedLoanDTO;
 import br.com.matheuspadilha.libraryapi.model.entity.Book;
 import br.com.matheuspadilha.libraryapi.model.entity.Loan;
 import br.com.matheuspadilha.libraryapi.service.BookService;
@@ -36,5 +37,13 @@ public class LoanController {
         entity = service.save(entity);
 
         return entity.getId();
+    }
+
+    @PatchMapping("{id}")
+    public void returnBook(@PathVariable Long id, @RequestBody ReturnedLoanDTO dto){
+        Loan loan = service.getById(id).get();
+        loan.setReturned(dto.getReturned());
+
+        service.update(loan);
     }
 }
