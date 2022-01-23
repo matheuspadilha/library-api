@@ -92,6 +92,22 @@ class LoanServiceTest {
         verify(repository, times(1)).findById(id);
     }
 
+    @Test
+    @DisplayName("Deve atualizar um emprestimo")
+    void updateLoanTest() {
+        Long id = 1L;
+        Loan loan = createLoan();
+        loan.setId(id);
+        loan.setReturned(true);
+
+        when(repository.save(loan)).thenReturn(loan);
+
+        Loan updatedLoan = service.update(loan);
+
+        assertThat(updatedLoan.getReturned()).isTrue();
+        verify(repository, times(1)).save(loan);
+    }
+
     private Loan createLoan() {
         Book book = Book.builder().id(1L).build();
         String customer = "Padilha";
