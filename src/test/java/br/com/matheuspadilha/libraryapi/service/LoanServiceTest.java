@@ -1,5 +1,6 @@
 package br.com.matheuspadilha.libraryapi.service;
 
+import br.com.matheuspadilha.libraryapi.exception.BusinessException;
 import br.com.matheuspadilha.libraryapi.model.entity.Book;
 import br.com.matheuspadilha.libraryapi.model.entity.Loan;
 import br.com.matheuspadilha.libraryapi.model.repository.LoanRepository;
@@ -15,7 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -49,6 +51,7 @@ class LoanServiceTest {
                 .loanDate(LocalDate.now())
                 .build();
 
+        when(repository.existsByBookAndNotReturned(book)).thenReturn(false);
         when(repository.save(savingLoan)).thenReturn(savedLoan);
 
         Loan loan = service.save(savingLoan);
@@ -57,5 +60,26 @@ class LoanServiceTest {
         assertThat(loan.getBook().getId()).isEqualTo(savedLoan.getBook().getId());
         assertThat(loan.getCustomer()).isEqualTo(savedLoan.getCustomer());
         assertThat(loan.getLoanDate()).isEqualTo(savedLoan.getLoanDate());
+    }
+
+    @Test
+    @DisplayName("Deve lançar erro de negocio ao salvar um emprestimo com livro ja emprestado")
+    void loanedBookSaveTest() {
+        Book book = Book.builder().id(1L).build();
+        String customer = "Padilha";
+        Loan savingLoan = Loan.builder()
+                .book(book)
+                .customer(customer)
+                .loanDate(LocalDate.now())
+                .build();
+
+        when(repository.existsByBookAndNotReturned(book)).thenReturn(true);
+
+        Throwable exception = catchThrowable(() -> service.save(savingLoan));
+
+        assertThat(exception).isInstanceOf(BusinessException.class);
+
+        verify(repository, never()).save(savingLoan);
+        verify(repository, times(1)).existsByBookAndNotReturned(book);
     }
 }

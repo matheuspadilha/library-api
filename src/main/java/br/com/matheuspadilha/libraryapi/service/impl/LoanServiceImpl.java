@@ -1,5 +1,6 @@
 package br.com.matheuspadilha.libraryapi.service.impl;
 
+import br.com.matheuspadilha.libraryapi.exception.BusinessException;
 import br.com.matheuspadilha.libraryapi.model.entity.Loan;
 import br.com.matheuspadilha.libraryapi.model.repository.LoanRepository;
 import br.com.matheuspadilha.libraryapi.service.LoanService;
@@ -16,6 +17,11 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Loan save(Loan loan) {
+
+        if (repository.existsByBookAndNotReturned(loan.getBook())) {
+            throw new BusinessException("Book already loaned");
+        }
+
         return repository.save(loan);
     }
 }
