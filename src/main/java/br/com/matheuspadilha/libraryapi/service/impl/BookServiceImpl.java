@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> find(Book filter, Pageable pageRequest) {
+    public Page<Book> find(Book filter, Pageable pageable) {
         Example<Book> example = Example.of(filter,
                 ExampleMatcher
                         .matching()
@@ -63,7 +63,7 @@ public class BookServiceImpl implements BookService {
                         .withIgnoreNullValues()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
         );
-        return repository.findAll(example, pageRequest);
+        return repository.findAll(example, pageable);
     }
 
     @Override
