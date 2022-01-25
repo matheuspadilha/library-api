@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -29,6 +30,9 @@ public class Book {
 
     @Column
     private String isbn;
+
+    @OneToMany( mappedBy = "book", fetch = FetchType.LAZY )
+    private List<Loan> loans;
 
     @Override
     public boolean equals(Object o) {
