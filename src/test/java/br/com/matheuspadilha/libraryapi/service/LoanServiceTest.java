@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
+public
 class LoanServiceTest {
 
     LoanService service;
@@ -108,7 +109,7 @@ class LoanServiceTest {
         verify(repository, times(1)).save(loan);
     }
 
-    private Loan createLoan() {
+    public static Loan createLoan() {
         Book book = Book.builder().id(1L).build();
         String customer = "Padilha";
 
