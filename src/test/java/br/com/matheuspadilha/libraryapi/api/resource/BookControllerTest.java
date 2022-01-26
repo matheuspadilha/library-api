@@ -4,6 +4,7 @@ import br.com.matheuspadilha.libraryapi.api.dto.BookDTO;
 import br.com.matheuspadilha.libraryapi.exception.BusinessException;
 import br.com.matheuspadilha.libraryapi.model.entity.Book;
 import br.com.matheuspadilha.libraryapi.service.BookService;
+import br.com.matheuspadilha.libraryapi.service.LoanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
@@ -38,13 +39,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class BookControllerTest {
 
-    static String BOOK_API = "/api/books";
+    static final String BOOK_API = "/api/books";
 
     @Autowired
     MockMvc mvc;
 
     @MockBean
     BookService service;
+
+    @MockBean
+    LoanService loanService;
 
     @Test
     @DisplayName("Deve criar um livro com sucesso.")

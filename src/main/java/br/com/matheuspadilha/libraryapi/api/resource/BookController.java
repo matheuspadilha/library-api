@@ -26,9 +26,7 @@ public class BookController {
 
     private final BookService service;
     private final LoanService loanService;
-
     private final ModelMapper modelMapper;
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
