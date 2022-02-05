@@ -1,5 +1,5 @@
 # Projeto desenvolvido durante o curso Design de API's RestFul com Spring Boot, TDD e o novo JUnit5
-<a href="https://www.udemy.com/course/design-de-apis-restful-com-tdd-spring-boot-e-junit-5/">Link do curso</a>
+<a href="https://www.udemy.com/course/design-de-apis-restful-com-tdd-spring-boot-e-junit-5/">Link do curso Udemy</a>
 
 ## Projeto de controle de aluguel de livros.
 
